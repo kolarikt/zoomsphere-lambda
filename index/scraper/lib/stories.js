@@ -264,7 +264,7 @@ module.exports.detail = function(event, cb) {
 
 
     }
-    //jeste dalsisdsd
+
 
 
     var scraper_settings = getScraperSettings(event);
