@@ -1,0 +1,117 @@
+{
+  "url":"http://www.novinky.cz/krimi/394394-recidivista-citi-castecnou-vinu-za-smrt-pritelkyne-tu-zastrelil-policista.html",
+  "settings" : {
+    "startUrl": "http://www.novinky.cz/stalo-se/",
+    "selectors": [
+      {
+        "parentSelectors": [
+          "_root"
+        ],
+        "type": "SelectorLink",
+        "multiple": true,
+        "id": "stories",
+        "selector": "div div div div div div div:nth-of-type(n+2) h3 a, div.item:nth-of-type(n+4) h3.likeInInfo a",
+        "delay": ""
+      },
+      {
+        "parentSelectors": [
+          "stories"
+        ],
+        "type": "SelectorText",
+        "multiple": false,
+        "id": "title",
+        "selector": "h1",
+        "regex": "",
+        "delay": ""
+      },
+      {
+        "parentSelectors": [
+          "stories"
+        ],
+        "type": "SelectorText",
+        "multiple": true,
+        "id": "description",
+        "selector": "p.perex, div.articleBody p",
+        "regex": "",
+        "delay": ""
+      },
+      {
+        "parentSelectors": [
+          "stories"
+        ],
+        "type": "SelectorText",
+        "multiple": false,
+        "id": "author",
+        "selector": "p.articleAuthors",
+        "regex": "",
+        "delay": ""
+      },
+      {
+        "parentSelectors": [
+          "stories"
+        ],
+        "type": "SelectorImage",
+        "multiple": false,
+        "id": "image",
+        "selector": "div.topMediaBox img",
+        "downloadImage": false,
+        "delay": ""
+      },
+      {
+        "parentSelectors": [
+          "stories"
+        ],
+        "type": "SelectorLink",
+        "multiple": false,
+        "id": "comments",
+        "selector": "div.related a",
+        "delay": ""
+      },
+      {
+        "parentSelectors": [
+          "comments"
+        ],
+        "type": "SelectorElement",
+        "multiple": true,
+        "id": "comment",
+        "selector": "div.contribution",
+        "delay": ""
+      },
+      {
+        "parentSelectors": [
+          "comment"
+        ],
+        "type": "SelectorText",
+        "multiple": false,
+        "id": "comment_description",
+        "selector": "p",
+        "regex": "",
+        "delay": ""
+      },
+      {
+        "parentSelectors": [
+          "comment"
+        ],
+        "type": "SelectorText",
+        "multiple": false,
+        "id": "comment_author",
+        "selector": "h4.name span",
+        "regex": "",
+        "delay": ""
+      },
+      {
+        "parentSelectors": [
+          "comment"
+        ],
+        "type": "SelectorImage",
+        "multiple": false,
+        "id": "comment_author_image",
+        "selector": "img.icon",
+        "downloadImage": false,
+        "delay": ""
+      }
+    ],
+    "_id": "novinky"
+  }
+}
+

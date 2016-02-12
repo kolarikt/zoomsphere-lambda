@@ -1,0 +1,25 @@
+{
+  "name": "",
+  "version": "0.0.1",
+  "description": "Serverless module dependencies",
+  "author": "me",
+  "license": "MIT",
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/"
+  },
+  "keywords": [],
+  "devDependencies": {},
+  "dependencies": {
+    "chalk": "^1.1.1",
+    "charset": "^1.0.0",
+    "cheerio": "^0.20.0",
+    "encoding": "^0.1.12",
+    "iconv-lite": "^0.4.13",
+    "jschardet": "^1.4.1",
+    "request": "^2.69.0",
+    "serverless-helpers-js": "~0.0.3",
+    "util": "^0.10.3"
+  }
+}
