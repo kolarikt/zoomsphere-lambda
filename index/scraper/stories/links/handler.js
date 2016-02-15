@@ -11,12 +11,11 @@
 var ServerlessHelpers = require('serverless-helpers-js').loadEnv();
 
 // Require Logic
-var lib = require('../../lib/stories.js');
+var stories = require('../../lib/stories.js');
 
 // Lambda Handler
 module.exports.handler = function(event, context) {
-
-  lib.links(event, function(error, response) {
+  stories.links(event, function(error, response) {
     return context.done(error, response);
   });
 };
