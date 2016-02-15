@@ -8,7 +8,5 @@ module.exports.respond = function(event, cb) {
     message: "Your Serverless function ran successfully!"
   };
 
-  var request = require('request');
-
   return cb(null, response);
 };
