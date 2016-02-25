@@ -17,17 +17,16 @@ module.exports.links = function(event, cb) {
     //locale test
     if(process.env.OS == 'Windows_NT') {
 
-        event.settings = {"startUrl":"http://zpravy.idnes.cz/archiv.aspx?datum=&idostrova=idnes","selectors":[{"parentSelectors":["_root"],"type":"SelectorLink","multiple":true,"id":"stories2","selector":"div.cell h3 a","delay":""},{"parentSelectors":["stories"],"type":"SelectorText","multiple":false,"id":"title","selector":"h1","regex":"","delay":""},{"parentSelectors":["stories"],"type":"SelectorText","multiple":true,"id":"description","selector":"div.opener, div.bbtext > p, h3.tit","regex":"","delay":""},{"parentSelectors":["stories"],"type":"SelectorText","multiple":false,"id":"author","selector":"a.name span","regex":"","delay":""},{"parentSelectors":["stories"],"type":"SelectorImage","multiple":false,"id":"image","selector":"img.block","delay":"","downloadImage":false},{"parentSelectors":["stories"],"type":"SelectorLink","multiple":false,"id":"comments","selector":"div.moot-capture a","delay":""},{"parentSelectors":["comments1"],"type":"SelectorElement","multiple":true,"id":"comment","selector":"div.disc-list > div.contribution","delay":""},{"parentSelectors":["comment"],"type":"SelectorText","multiple":true,"id":"comment_description","selector":"p","regex":"","delay":""},{"parentSelectors":["comment"],"type":"SelectorText","multiple":false,"id":"comment_author","selector":"h4.name a","regex":"","delay":""},{"parentSelectors":["comment"],"type":"SelectorImage","multiple":false,"id":"comment_image","selector":"td.disc-user-foto img","downloadImage":false,"delay":""},{"parentSelectors":["comments"],"type":"SelectorLink","multiple":false,"id":"comments1","selector":"div.moot-line a:nth-of-type(2)","delay":""}],"_id":"idnesfinal"}
+        event.settings = {"startUrl":"http://zpravy.idnes.cz/archiv.aspx?datum=&idostrova=idnes","selectors":[{"parentSelectors":["_root"],"type":"SelectorLink","multiple":true,"id":"stories","selector":"div.cell h3 a","delay":""},{"parentSelectors":["stories"],"type":"SelectorText","multiple":false,"id":"title","selector":"h1","regex":"","delay":""},{"parentSelectors":["stories"],"type":"SelectorText","multiple":true,"id":"description","selector":"div.opener, div.bbtext > p, h3.tit","regex":"","delay":""},{"parentSelectors":["stories"],"type":"SelectorText","multiple":false,"id":"author","selector":"a.name span","regex":"","delay":""},{"parentSelectors":["stories"],"type":"SelectorImage","multiple":false,"id":"image","selector":"img.block","delay":"","downloadImage":false},{"parentSelectors":["stories"],"type":"SelectorLink","multiple":false,"id":"comments","selector":"div.moot-capture a","delay":""},{"parentSelectors":["comments1"],"type":"SelectorElement","multiple":true,"id":"comment","selector":"div.disc-list > div.contribution","delay":""},{"parentSelectors":["comment"],"type":"SelectorText","multiple":true,"id":"comment_description","selector":"p","regex":"","delay":""},{"parentSelectors":["comment"],"type":"SelectorText","multiple":false,"id":"comment_author","selector":"h4.name a","regex":"","delay":""},{"parentSelectors":["comment"],"type":"SelectorImage","multiple":false,"id":"comment_image","selector":"td.disc-user-foto img","downloadImage":false,"delay":""},{"parentSelectors":["comments"],"type":"SelectorLink","multiple":false,"id":"comments1","selector":"div.moot-line a:nth-of-type(2)","delay":""}],"_id":"idnesfinal"}
         //event.settings = {"startUrl":"http://www.novinky.cz/stalo-se/","selectors":[{"parentSelectors":["_root"],"type":"SelectorLink","multiple":true,"id":"stories","selector":"div div div div div div div:nth-of-type(n+2) h3 a, div.item:nth-of-type(n+4) h3.likeInInfo a","delay":""},{"parentSelectors":["stories"],"type":"SelectorText","multiple":false,"id":"title","selector":"h1","regex":"","delay":""},{"parentSelectors":["stories"],"type":"SelectorText","multiple":true,"id":"description","selector":"p.perex, div.articleBody p","regex":"","delay":""},{"parentSelectors":["stories"],"type":"SelectorText","multiple":false,"id":"author","selector":"p.articleAuthors","regex":"","delay":""},{"parentSelectors":["stories"],"type":"SelectorImage","multiple":false,"id":"image","selector":"div.topMediaBox img","downloadImage":false,"delay":""},{"parentSelectors":["stories"],"type":"SelectorLink","multiple":false,"id":"comments","selector":"div.related a","delay":""},{"parentSelectors":["comments"],"type":"SelectorElement","multiple":true,"id":"comment","selector":"div.contribution","delay":""},{"parentSelectors":["comment"],"type":"SelectorText","multiple":false,"id":"comment_description","selector":"p","regex":"","delay":""},{"parentSelectors":["comment"],"type":"SelectorText","multiple":false,"id":"comment_author","selector":"h4.name span","regex":"","delay":""},{"parentSelectors":["comment"],"type":"SelectorImage","multiple":false,"id":"comment_author_image","selector":"img.icon","downloadImage":false,"delay":""}],"_id":"novinky"};
         //event.settings.startUrl = ''
 
-        event.settings = {"_id":"synotligacz","startUrl":"http://www.synotliga.cz/clanky.html","selectors":[{"parentSelectors":["_root"],"type":"SelectorLink","multiple":true,"id":"stories","selector":"h2 a","delay":""},{"parentSelectors":["stories"],"type":"SelectorText","multiple":false,"id":"title","selector":"h1","regex":"","delay":""},{"parentSelectors":["stories"],"type":"SelectorText","multiple":false,"id":"description","selector":"article p","regex":"","delay":""},{"parentSelectors":["stories"],"type":"SelectorImage","multiple":false,"id":"image","selector":"div.image img","downloadImage":false,"delay":""},{"parentSelectors":["stories"],"type":"SelectorText","multiple":false,"id":"author","selector":"p.about span:nth-of-type(2)","regex":"","delay":""}]}
+        //event.settings = {"_id":"synotligacz","startUrl":"http://www.synotliga.cz/clanky.html","selectors":[{"parentSelectors":["_root"],"type":"SelectorLink","multiple":true,"id":"stories","selector":"h2 a","delay":""},{"parentSelectors":["stories"],"type":"SelectorText","multiple":false,"id":"title","selector":"h1","regex":"","delay":""},{"parentSelectors":["stories"],"type":"SelectorText","multiple":false,"id":"description","selector":"article p","regex":"","delay":""},{"parentSelectors":["stories"],"type":"SelectorImage","multiple":false,"id":"image","selector":"div.image img","downloadImage":false,"delay":""},{"parentSelectors":["stories"],"type":"SelectorText","multiple":false,"id":"author","selector":"p.about span:nth-of-type(2)","regex":"","delay":""}]}
 
         //panorama.it
         //event.settings = {"_id":"panorama_it","startUrl":"http://www.panorama.it/","selectors":[{"parentSelectors":["_root"],"type":"SelectorLink","multiple":true,"id":"stories","selector":"div.col-sm-5 h2 a, div.row.row-wide-launch article.article-entry:nth-of-type(n+2) h2 a","delay":""},{"parentSelectors":["stories"],"type":"SelectorText","multiple":false,"id":"title","selector":"h1","regex":"","delay":""},{"parentSelectors":["stories"],"type":"SelectorText","multiple":true,"id":"description","selector":"header.article-header h2, div.entry p","regex":"","delay":""},{"parentSelectors":["stories"],"type":"SelectorImage","multiple":false,"id":"image","selector":"img.attachment-Foto","downloadImage":false,"delay":""}]}
-        //event.url = 'http://www.panorama.it/sport/calcio/india-calciatore-morto-capriole-klose-video/';
 
-        //event.settings = {"_id":"unita_it","startUrl":"http://unita.tv","selectors":[{"parentSelectors":["_root"],"type":"SelectorLink","multiple":true,"id":"stories","selector":"div.menu-menu-principale-container a","delay":""},{"parentSelectors":["_root"],"type":"SelectorLink","multiple":false,"id":"stories2","selector":"h1.entry-title a","delay":""},{"parentSelectors":["stories2"],"type":"SelectorText","multiple":false,"id":"title","selector":"h1.entry-title","regex":"","delay":""},{"parentSelectors":["stories2"],"type":"SelectorText","multiple":true,"id":"description","selector":"div:nth-of-type(n+2) > p","regex":"","delay":""},{"parentSelectors":["stories2"],"type":"SelectorImage","multiple":false,"id":"image","selector":"img.attachment-articolo","downloadImage":false,"delay":""},{"parentSelectors":["stories2"],"type":"SelectorText","multiple":false,"id":"author","selector":"div.entry-author-name a","regex":"","delay":""}]}
+        //event.settings = {"_id":"unita_it","startUrl":"http://unita.tv","selectors":[{"parentSelectors":["_root"],"type":"SelectorLink","multiple":true,"id":"categories","selector":"div.menu-menu-principale-container a","delay":""},{"parentSelectors":["_root"],"type":"SelectorLink","multiple":false,"id":"stories","selector":"h1.entry-title a","delay":""},{"parentSelectors":["stories2"],"type":"SelectorText","multiple":false,"id":"title","selector":"h1.entry-title","regex":"","delay":""},{"parentSelectors":["stories2"],"type":"SelectorText","multiple":true,"id":"description","selector":"div:nth-of-type(n+2) > p","regex":"","delay":""},{"parentSelectors":["stories2"],"type":"SelectorImage","multiple":false,"id":"image","selector":"img.attachment-articolo","downloadImage":false,"delay":""},{"parentSelectors":["stories2"],"type":"SelectorText","multiple":false,"id":"author","selector":"div.entry-author-name a","regex":"","delay":""}]}
     }
 
     //selectors
@@ -44,122 +43,175 @@ module.exports.links = function(event, cb) {
         return cb(error);
     }
 
-    else if(!Array.isArray(scraper_settings.stories) || !scraper_settings.stories.length) {
+    else if(!scraper_settings.stories) {
         var error = new Error("Missing Stories parameters");
         return cb(error);
     }
 
-    //var stories = Object.assign(scraper_settings.stories);
-    //var stories = Object.assign({}, scraper_settings.stories);
+    else if(!scraper_settings.stories.selector) {
+        var error = new Error("Missing Stories selector");
+        return cb(error);
+    }
 
-    scraper.openPage(event.settings.startUrl, 'stories', false, function(error, response) {
 
-        if (error) {
-            console.log(chalk.white.bgRed(error.toString()));
+
+    /*
+    else if(!Array.isArray(scraper_settings.stories) || !scraper_settings.stories.length) {
+        var error = new Error("Missing Stories parameters");
+        return cb(error);
+    }
+    */
+
+    //open categories pages
+    if(scraper_settings.categories) {
+
+        if(!scraper_settings.categories.selector) {
+            var error = new Error("Missing Categories selector");
             return cb(error);
         }
 
-        var $ = cheerio.load(response, {decodeEntities: true});
+        var links = [];
 
+        scraper.openPage(event.settings.startUrl, 'categories', false, function(error, response) {
 
-        $(scraper_settings.stories[0].selector).each(function (idx, elem) {
-
-            var link = $(elem).attr('href');
-
-            if(link != undefined) {
-
-                var link_parse = url.parse(link);
-
-                //relative address
-                if (link_parse.host === null) {
-                    link = url.resolve(event.settings.startUrl, link);
-                }
-
-                links.push(link);
-
+            if (error) {
+                console.log(chalk.white.bgRed(error.toString()));
+                return cb(error);
             }
 
-        });
+            var $ = cheerio.load(response, {decodeEntities: true});
+            var stories = [];
 
-        //redirect to other pages from navigation - no one news page
-        if(links.length && scraper_settings.stories.length > 1) {
+            $(scraper_settings.categories.selector).each(function (idx, elem) {
 
-            var links2 = [];
+                var link = $(elem).attr('href');
 
-            async.each(links, function(file, cb) {
+                if (link != undefined) {
 
-                //var stories = Object.assign({}, scraper_settings.stories);
+                    var link_parse = url.parse(link);
 
-
-                scraper.openPage(file, 'stories', false, function(error, response) {
-
-                    if (error) {
-                        console.log(chalk.white.bgRed(error.toString()));
-                        return cb(error);
+                    //relative address
+                    if (link_parse.host === null) {
+                        link = url.resolve(event.settings.startUrl, link);
                     }
 
-                    var $ = cheerio.load(response, {decodeEntities: true});
+                    stories.push(link);
 
-                    $(scraper_settings.stories[1].selector).each(function (idx, elem) {
+                }
 
-                        var link = $(elem).attr('href');
+            });
 
-                        if (link != undefined) {
+            //redirect to other pages from navigation - no one news page
+            if (stories.length) {
 
-                            var link_parse = url.parse(link);
+                async.each(stories, function (file, cb) {
 
-                            //relative address
-                            if (link_parse.host === null) {
-                                link = url.resolve(file, link);
-                            }
+                    scraper.openPage(file, 'stories', false, function (error, response) {
 
-                            links2.push(link);
-
+                        if (error) {
+                            console.log(chalk.white.bgRed(error.toString()));
+                            return cb(error);
                         }
 
-                    });
+                        var $ = cheerio.load(response, {decodeEntities: true});
 
-                    return cb(null, {links:links2});
+                        $(scraper_settings.stories.selector).each(function (idx, elem) {
 
-                })
-            },
+                            var link = $(elem).attr('href');
 
-                function(err){
-                // if any of the file processing produced an error, err would equal that error
-                if( err ) {
-                    // One of the iterations produced an error.
-                    // All processing will now stop.
-                    var error = new Error("A file failed to process:" + file);
-                    return cb(error);
+                            if (link != undefined) {
 
-                } else {
-                    console.log('All files have been processed successfully');
-                    return cb(null, {links:links2});
+                                var link_parse = url.parse(link);
+
+                                //relative address
+                                if (link_parse.host === null) {
+                                    link = url.resolve(file, link);
+                                }
+
+                                links.push(link);
+
+                            }
+
+                        });
+
+                        return cb(null, {links: links});
+
+                    })
+                },
+                    function (err) {
+
+                        // if any of the file processing produced an error, err would equal that error
+                        if (err) {
+                            // One of the iterations produced an error.
+                            // All processing will now stop.
+                            var error = new Error("A file failed to process:" + file);
+                            return cb(error);
+
+                        } else {
+                            console.log('All files have been processed successfully');
+                            return cb(null, {links: links});
+                        }
+                    }
+                );
+
+            }
+
+            else {
+                return cb(null, {links: links});
+            }
+        })
+    }
+
+    //only news page
+    else {
+
+        scraper.openPage(event.settings.startUrl, 'stories', false, function (error, response) {
+
+            if (error) {
+                console.log(chalk.white.bgRed(error.toString()));
+                return cb(error);
+            }
+
+            var $ = cheerio.load(response, {decodeEntities: true});
+
+            $(scraper_settings.stories.selector).each(function (idx, elem) {
+
+                var link = $(elem).attr('href');
+
+                if (link != undefined) {
+
+                    var link_parse = url.parse(link);
+
+                    //relative address
+                    if (link_parse.host === null) {
+                        link = url.resolve(event.settings.startUrl, link);
+                    }
+
+                    links.push(link);
+
+                }
+
+            });
+
+
+            //test
+            /*
+            if (0 && links.length) {
+                for (var i = 0; i < 10; i++) {
+
+                    facebook.linkInteractions(links[i % links.length], function (error, response) {
+                        console.log(chalk.green(response));
+                    })
+
                 }
             }
+            */
 
-            );
-
-        }
-
-        else {
-            return cb(null, {links:links});
-        }
-
-        //test
-        if(0&&links.length) {
-            for (var i = 0; i < 10; i++) {
-
-                facebook.linkInteractions(links[i % links.length], function (error, response) {
-                    console.log(chalk.green(response));
-                })
-
-            }
-        }
+            return cb(null, {links: links});
 
 
-
-    });
+        });
+    }
 
 };
 
@@ -176,7 +228,6 @@ module.exports.detail = function(event, cb) {
 
         //novinky
         //event.settings = {"startUrl":"http://www.novinky.cz/stalo-se/","selectors":[{"parentSelectors":["_root"],"type":"SelectorLink","multiple":true,"id":"stories","selector":"div div div div div div div:nth-of-type(n+2) h3 a, div.item:nth-of-type(n+4) h3.likeInInfo a","delay":""},{"parentSelectors":["stories"],"type":"SelectorText","multiple":false,"id":"title","selector":"h1","regex":"","delay":""},{"parentSelectors":["stories"],"type":"SelectorText","multiple":true,"id":"description","selector":"p.perex, div.articleBody p","regex":"","delay":""},{"parentSelectors":["stories"],"type":"SelectorText","multiple":false,"id":"author","selector":"p.articleAuthors","regex":"","delay":""},{"parentSelectors":["stories"],"type":"SelectorImage","multiple":false,"id":"image","selector":"div.topMediaBox img","downloadImage":false,"delay":""},{"parentSelectors":["stories"],"type":"SelectorLink","multiple":false,"id":"comments","selector":"div.related a","delay":""},{"parentSelectors":["comments"],"type":"SelectorElement","multiple":true,"id":"comment","selector":"div.contribution","delay":""},{"parentSelectors":["comment"],"type":"SelectorText","multiple":false,"id":"comment_description","selector":"p","regex":"","delay":""},{"parentSelectors":["comment"],"type":"SelectorText","multiple":false,"id":"comment_author","selector":"h4.name span","regex":"","delay":""},{"parentSelectors":["comment"],"type":"SelectorImage","multiple":false,"id":"comment_author_image","selector":"img.icon","downloadImage":false,"delay":""}],"_id":"novinky"};
-
         //event.url = 'http://www.novinky.cz/zahranicni/evropa/394508-nato-vyrazi-do-egejskeho-more-proti-paserakum-lidi.html';
 
         //android market
@@ -196,9 +247,9 @@ module.exports.detail = function(event, cb) {
         //event.url = 'http://www.panorama.it/sport/calcio/india-calciatore-morto-capriole-klose-video/';
         //event.url = 'http://www.panorama.it/news/cronaca/papa-francesco-perche-i-bambini-soffrono/'
 
-        //
-        event.settings = {"_id":"quattroruote_it","startUrl":"http://www.quattroruote.it/","selectors":[{"parentSelectors":["_root"],"type":"SelectorLink","multiple":true,"id":"stories","selector":"div.rsSlide:nth-of-type(1) a, div.content_result_fixed:nth-of-type(n+2) article.block > a","delay":""},{"parentSelectors":["stories"],"type":"SelectorText","multiple":false,"id":"title","selector":"div.article_header h1","regex":"","delay":""},{"parentSelectors":["stories"],"type":"SelectorText","multiple":true,"id":"description","selector":"div.article_paragraph:nth-of-type(n+2) p:nth-of-type(1)","regex":"","delay":""},{"parentSelectors":["stories"],"type":"SelectorImage","multiple":false,"id":"image","selector":"img.rsImg","downloadImage":false,"delay":""},{"parentSelectors":["stories"],"type":"SelectorElement","multiple":true,"id":"comment","selector":"div.commento > div.corpo-commento, div.comment-replies div.parbase:nth-of-type(n+2)","delay":""},{"parentSelectors":["comment"],"type":"SelectorText","multiple":false,"id":"comment_description","selector":"div.commento > div.corpo-commento div.testo-commento, div.risposta-commento div.testo-commento","regex":"","delay":""},{"parentSelectors":["comment"],"type":"SelectorText","multiple":true,"id":"comment_author","selector":"div.commento > div.corpo-commento div.autore-commento, div.risposta-commento div.autore-commento","regex":"","delay":""}]}
-        event.url = 'http://www.quattroruote.it/news/mercato/2016/02/24/gruppo_volkswagen_crescita_in_gennaio_grazie_alla_cina.html'
+        //quattroruote_it
+        //event.settings = {"_id":"quattroruote_it","startUrl":"http://www.quattroruote.it/","selectors":[{"parentSelectors":["_root"],"type":"SelectorLink","multiple":true,"id":"stories","selector":"div.rsSlide:nth-of-type(1) a, div.content_result_fixed:nth-of-type(n+2) article.block > a","delay":""},{"parentSelectors":["stories"],"type":"SelectorText","multiple":false,"id":"title","selector":"div.article_header h1","regex":"","delay":""},{"parentSelectors":["stories"],"type":"SelectorText","multiple":true,"id":"description","selector":"div.article_paragraph:nth-of-type(n+2) p:nth-of-type(1)","regex":"","delay":""},{"parentSelectors":["stories"],"type":"SelectorImage","multiple":false,"id":"image","selector":"img.rsImg","downloadImage":false,"delay":""},{"parentSelectors":["stories"],"type":"SelectorElement","multiple":true,"id":"comment","selector":"div.commento > div.corpo-commento, div.comment-replies div.parbase:nth-of-type(n+2)","delay":""},{"parentSelectors":["comment"],"type":"SelectorText","multiple":false,"id":"comment_description","selector":"div.commento > div.corpo-commento div.testo-commento, div.risposta-commento div.testo-commento","regex":"","delay":""},{"parentSelectors":["comment"],"type":"SelectorText","multiple":true,"id":"comment_author","selector":"div.commento > div.corpo-commento div.autore-commento, div.risposta-commento div.autore-commento","regex":"","delay":""}]}
+        //event.url = 'http://www.quattroruote.it/news/mercato/2016/02/24/gruppo_volkswagen_crescita_in_gennaio_grazie_alla_cina.html'
 
     }
 

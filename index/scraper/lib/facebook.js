@@ -25,7 +25,6 @@ module.exports.linkInteractions = function(link, callback) {
 //read comments
 module.exports.linkComments = function(link, callback) {
 
-
     var access_token = module.exports.accessToken(1);
 
     //facebook url object_id

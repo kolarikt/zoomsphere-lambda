@@ -63,7 +63,7 @@ module.exports.openPage = function(link, mode, settings, cb) {
         }
         */
 
-        if(mode == 'stories') {
+        if(mode == 'stories' || mode == 'categories') {
             encode = false;
             redirect = false;
         }
@@ -90,8 +90,6 @@ module.exports.openPage = function(link, mode, settings, cb) {
         if(redirect) {
 
             var $ = cheerio.load(body, {decodeEntities: true});
-
-            //console.log(settings)
 
             $(settings[0].selector).each(function(idx, elem) {
 
@@ -138,7 +136,8 @@ module.exports.getScraperSettings = function(event) {
     }
 
     var result = {
-        stories: [],
+        categories: '',
+        stories: '',
         detail: {},
         comments: {
             links: [],
@@ -149,9 +148,14 @@ module.exports.getScraperSettings = function(event) {
 
     event.settings.selectors.forEach(function (value) {
 
-        //stories, stories1...
-        if (value.id.indexOf('stories') !== -1) {
-            result.stories.push(value);
+        //links to details
+        if (value.id == 'stories') {
+            result.stories = value;
+        }
+
+        //categories
+        else if (value.id == 'categories') {
+            result.categories = value;
         }
 
         else if (value.id == 'title') {
@@ -170,7 +174,7 @@ module.exports.getScraperSettings = function(event) {
             result.detail.author = value;
         }
 
-        //commets, comments1
+        //commets, comments1 - redirect
         else if (value.id.indexOf('comments') !== -1) {
             result.comments.links.push(value);
         }
