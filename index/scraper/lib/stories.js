@@ -6,10 +6,13 @@
 var cheerio = require('cheerio'),
     url = require('url'),
     chalk = require('chalk'),
-    scraper = require('./scraper.js');
+    scraper = require('./scraper'),
+    facebook = require('./facebook'),
+    async = require('async');
 
 //links to stories
 module.exports.links = function(event, cb) {
+
 
     //locale test
     if(process.env.OS == 'Windows_NT') {
@@ -18,10 +21,18 @@ module.exports.links = function(event, cb) {
         //event.settings = {"startUrl":"http://www.novinky.cz/stalo-se/","selectors":[{"parentSelectors":["_root"],"type":"SelectorLink","multiple":true,"id":"stories","selector":"div div div div div div div:nth-of-type(n+2) h3 a, div.item:nth-of-type(n+4) h3.likeInInfo a","delay":""},{"parentSelectors":["stories"],"type":"SelectorText","multiple":false,"id":"title","selector":"h1","regex":"","delay":""},{"parentSelectors":["stories"],"type":"SelectorText","multiple":true,"id":"description","selector":"p.perex, div.articleBody p","regex":"","delay":""},{"parentSelectors":["stories"],"type":"SelectorText","multiple":false,"id":"author","selector":"p.articleAuthors","regex":"","delay":""},{"parentSelectors":["stories"],"type":"SelectorImage","multiple":false,"id":"image","selector":"div.topMediaBox img","downloadImage":false,"delay":""},{"parentSelectors":["stories"],"type":"SelectorLink","multiple":false,"id":"comments","selector":"div.related a","delay":""},{"parentSelectors":["comments"],"type":"SelectorElement","multiple":true,"id":"comment","selector":"div.contribution","delay":""},{"parentSelectors":["comment"],"type":"SelectorText","multiple":false,"id":"comment_description","selector":"p","regex":"","delay":""},{"parentSelectors":["comment"],"type":"SelectorText","multiple":false,"id":"comment_author","selector":"h4.name span","regex":"","delay":""},{"parentSelectors":["comment"],"type":"SelectorImage","multiple":false,"id":"comment_author_image","selector":"img.icon","downloadImage":false,"delay":""}],"_id":"novinky"};
         //event.settings.startUrl = ''
 
+        event.settings = {"_id":"synotligacz","startUrl":"http://www.synotliga.cz/clanky.html","selectors":[{"parentSelectors":["_root"],"type":"SelectorLink","multiple":true,"id":"stories","selector":"h2 a","delay":""},{"parentSelectors":["stories"],"type":"SelectorText","multiple":false,"id":"title","selector":"h1","regex":"","delay":""},{"parentSelectors":["stories"],"type":"SelectorText","multiple":false,"id":"description","selector":"article p","regex":"","delay":""},{"parentSelectors":["stories"],"type":"SelectorImage","multiple":false,"id":"image","selector":"div.image img","downloadImage":false,"delay":""},{"parentSelectors":["stories"],"type":"SelectorText","multiple":false,"id":"author","selector":"p.about span:nth-of-type(2)","regex":"","delay":""}]}
+
+        //panorama.it
+        //event.settings = {"_id":"panorama_it","startUrl":"http://www.panorama.it/","selectors":[{"parentSelectors":["_root"],"type":"SelectorLink","multiple":true,"id":"stories","selector":"div.col-sm-5 h2 a, div.row.row-wide-launch article.article-entry:nth-of-type(n+2) h2 a","delay":""},{"parentSelectors":["stories"],"type":"SelectorText","multiple":false,"id":"title","selector":"h1","regex":"","delay":""},{"parentSelectors":["stories"],"type":"SelectorText","multiple":true,"id":"description","selector":"header.article-header h2, div.entry p","regex":"","delay":""},{"parentSelectors":["stories"],"type":"SelectorImage","multiple":false,"id":"image","selector":"img.attachment-Foto","downloadImage":false,"delay":""}]}
+        //event.url = 'http://www.panorama.it/sport/calcio/india-calciatore-morto-capriole-klose-video/';
+
+        //event.settings = {"_id":"unita_it","startUrl":"http://unita.tv","selectors":[{"parentSelectors":["_root"],"type":"SelectorLink","multiple":true,"id":"stories","selector":"div.menu-menu-principale-container a","delay":""},{"parentSelectors":["_root"],"type":"SelectorLink","multiple":false,"id":"stories2","selector":"h1.entry-title a","delay":""},{"parentSelectors":["stories2"],"type":"SelectorText","multiple":false,"id":"title","selector":"h1.entry-title","regex":"","delay":""},{"parentSelectors":["stories2"],"type":"SelectorText","multiple":true,"id":"description","selector":"div:nth-of-type(n+2) > p","regex":"","delay":""},{"parentSelectors":["stories2"],"type":"SelectorImage","multiple":false,"id":"image","selector":"img.attachment-articolo","downloadImage":false,"delay":""},{"parentSelectors":["stories2"],"type":"SelectorText","multiple":false,"id":"author","selector":"div.entry-author-name a","regex":"","delay":""}]}
     }
 
     //selectors
     var scraper_settings = scraper.getScraperSettings(event);
+    //console.log(scraper_settings)
     var links = [];
 
     if ( scraper_settings instanceof Error ) {
@@ -38,9 +49,10 @@ module.exports.links = function(event, cb) {
         return cb(error);
     }
 
-    var stories = scraper_settings.stories;
+    //var stories = Object.assign(scraper_settings.stories);
+    //var stories = Object.assign({}, scraper_settings.stories);
 
-    scraper.openPage(event.settings.startUrl, 'stories', stories, function(error, response) {
+    scraper.openPage(event.settings.startUrl, 'stories', false, function(error, response) {
 
         if (error) {
             console.log(chalk.white.bgRed(error.toString()));
@@ -49,7 +61,8 @@ module.exports.links = function(event, cb) {
 
         var $ = cheerio.load(response, {decodeEntities: true});
 
-        $(stories[stories.length-1].selector).each(function (idx, elem) {
+
+        $(scraper_settings.stories[0].selector).each(function (idx, elem) {
 
             var link = $(elem).attr('href');
 
@@ -68,7 +81,83 @@ module.exports.links = function(event, cb) {
 
         });
 
-        return cb(null, {links:links});
+        //redirect to other pages from navigation - no one news page
+        if(links.length && scraper_settings.stories.length > 1) {
+
+            var links2 = [];
+
+            async.each(links, function(file, cb) {
+
+                //var stories = Object.assign({}, scraper_settings.stories);
+
+
+                scraper.openPage(file, 'stories', false, function(error, response) {
+
+                    if (error) {
+                        console.log(chalk.white.bgRed(error.toString()));
+                        return cb(error);
+                    }
+
+                    var $ = cheerio.load(response, {decodeEntities: true});
+
+                    $(scraper_settings.stories[1].selector).each(function (idx, elem) {
+
+                        var link = $(elem).attr('href');
+
+                        if (link != undefined) {
+
+                            var link_parse = url.parse(link);
+
+                            //relative address
+                            if (link_parse.host === null) {
+                                link = url.resolve(file, link);
+                            }
+
+                            links2.push(link);
+
+                        }
+
+                    });
+
+                    return cb(null, {links:links2});
+
+                })
+            },
+
+                function(err){
+                // if any of the file processing produced an error, err would equal that error
+                if( err ) {
+                    // One of the iterations produced an error.
+                    // All processing will now stop.
+                    var error = new Error("A file failed to process:" + file);
+                    return cb(error);
+
+                } else {
+                    console.log('All files have been processed successfully');
+                    return cb(null, {links:links2});
+                }
+            }
+
+            );
+
+        }
+
+        else {
+            return cb(null, {links:links});
+        }
+
+        //test
+        if(0&&links.length) {
+            for (var i = 0; i < 10; i++) {
+
+                facebook.linkInteractions(links[i % links.length], function (error, response) {
+                    console.log(chalk.green(response));
+                })
+
+            }
+        }
+
+
 
     });
 
@@ -98,6 +187,18 @@ module.exports.detail = function(event, cb) {
         //event.settings = {"regExp":{"comment_author":"comment.description = comment.description.replace(/[0-9]{1,}/g, '')"},"_id":"praktickazena_cz","startUrl":"http://praktickazena.cz","selectors":[{"parentSelectors":["_root"],"type":"SelectorLink","multiple":true,"id":"stories","selector":"h3 a","delay":""},{"parentSelectors":["stories"],"type":"SelectorText","multiple":false,"id":"title","selector":"h1.title","regex":"","delay":""},{"parentSelectors":["stories"],"type":"SelectorText","multiple":true,"id":"description","selector":"div.perex p","regex":"","delay":""},{"parentSelectors":["stories"],"type":"SelectorImage","multiple":false,"id":"image","selector":"div.article-detail img","downloadImage":false,"delay":""},{"parentSelectors":["stories"],"type":"SelectorElement","multiple":true,"id":"comment","selector":"div.comment","delay":""},{"parentSelectors":["comment"],"type":"SelectorText","multiple":true,"id":"comment_description","selector":"div.text","regex":"","delay":""},{"parentSelectors":["comment"],"type":"SelectorText","multiple":false,"id":"comment_author","selector":"span.name","regex":"","delay":""}]};
         //event.url = 'http://praktickazena.kafe.cz/krasa/kreativni-nocniky/';
 
+        //synot liga
+        //event.settings = {"_id":"synotligacz","startUrl":"http://www.synotliga.cz/clanky.html","selectors":[{"parentSelectors":["_root"],"type":"SelectorLink","multiple":true,"id":"stories","selector":"h2 a","delay":""},{"parentSelectors":["stories"],"type":"SelectorText","multiple":false,"id":"title","selector":"h1","regex":"","delay":""},{"parentSelectors":["stories"],"type":"SelectorText","multiple":false,"id":"description","selector":"article p","regex":"","delay":""},{"parentSelectors":["stories"],"type":"SelectorImage","multiple":false,"id":"image","selector":"div.image img","downloadImage":false,"delay":""},{"parentSelectors":["stories"],"type":"SelectorText","multiple":false,"id":"author","selector":"p.about span:nth-of-type(2)","regex":"","delay":""}]}
+        //event.url = 'http://www.synotliga.cz/clanek/11064-sprinter-a-maratonec-triumfy-mezi-bci-m-do-pbrami-a-olku.html';
+
+        //panorama.it
+        //event.settings = {"_id":"panorama_it","startUrl":"http://www.panorama.it/","selectors":[{"parentSelectors":["_root"],"type":"SelectorLink","multiple":true,"id":"stories","selector":"div.col-sm-5 h2 a, div.row.row-wide-launch article.article-entry:nth-of-type(n+2) h2 a","delay":""},{"parentSelectors":["stories"],"type":"SelectorText","multiple":false,"id":"title","selector":"h1","regex":"","delay":""},{"parentSelectors":["stories"],"type":"SelectorText","multiple":true,"id":"description","selector":"header.article-header h2, div.entry p","regex":"","delay":""},{"parentSelectors":["stories"],"type":"SelectorImage","multiple":false,"id":"image","selector":"img.attachment-Foto","downloadImage":false,"delay":""}]}
+        //event.url = 'http://www.panorama.it/sport/calcio/india-calciatore-morto-capriole-klose-video/';
+        //event.url = 'http://www.panorama.it/news/cronaca/papa-francesco-perche-i-bambini-soffrono/'
+
+        //
+        event.settings = {"_id":"quattroruote_it","startUrl":"http://www.quattroruote.it/","selectors":[{"parentSelectors":["_root"],"type":"SelectorLink","multiple":true,"id":"stories","selector":"div.rsSlide:nth-of-type(1) a, div.content_result_fixed:nth-of-type(n+2) article.block > a","delay":""},{"parentSelectors":["stories"],"type":"SelectorText","multiple":false,"id":"title","selector":"div.article_header h1","regex":"","delay":""},{"parentSelectors":["stories"],"type":"SelectorText","multiple":true,"id":"description","selector":"div.article_paragraph:nth-of-type(n+2) p:nth-of-type(1)","regex":"","delay":""},{"parentSelectors":["stories"],"type":"SelectorImage","multiple":false,"id":"image","selector":"img.rsImg","downloadImage":false,"delay":""},{"parentSelectors":["stories"],"type":"SelectorElement","multiple":true,"id":"comment","selector":"div.commento > div.corpo-commento, div.comment-replies div.parbase:nth-of-type(n+2)","delay":""},{"parentSelectors":["comment"],"type":"SelectorText","multiple":false,"id":"comment_description","selector":"div.commento > div.corpo-commento div.testo-commento, div.risposta-commento div.testo-commento","regex":"","delay":""},{"parentSelectors":["comment"],"type":"SelectorText","multiple":true,"id":"comment_author","selector":"div.commento > div.corpo-commento div.autore-commento, div.risposta-commento div.autore-commento","regex":"","delay":""}]}
+        event.url = 'http://www.quattroruote.it/news/mercato/2016/02/24/gruppo_volkswagen_crescita_in_gennaio_grazie_alla_cina.html'
 
     }
 
@@ -142,7 +243,7 @@ module.exports.detail = function(event, cb) {
         //description
         if(detail.description && detail.description.selector) {
             $(detail.description.selector).each(function (idx, elem) {
-                result.description += (result.description ? "\n" : "") + $(elem).text().trim();
+                result.description = scraper.clearText(result.description, $(elem).text());
             });
         }
 
@@ -165,7 +266,7 @@ module.exports.detail = function(event, cb) {
 
         //story author - optional
         if(detail.author && detail.author.selector) {
-            result.author = $(detail.author.selector).text();
+            result.author = $(detail.author.selector).text().trim();
 
             if (result.author == undefined) {
                 delete result.author;
@@ -179,8 +280,27 @@ module.exports.detail = function(event, cb) {
             return cb(error);
         }
 
+        var comments_facebook = $("fb\\:comments").attr('href');
+
+        //FB comments exists
+        if(comments_facebook != undefined) {
+
+            //read comments
+            facebook.linkComments(comments_facebook, function (error, response) {
+
+                if (error) {
+                    console.log(chalk.white.bgRed(error.toString()));
+                    return cb(error);
+                }
+
+                result.comments = response;
+
+                return cb(null, result);
+            });
+        }
+
         //exists comments
-        if(JSON.stringify(scraper_settings.comments.container) !== '{}') {
+        else if(JSON.stringify(scraper_settings.comments.container) !== '{}') {
 
             //redirect comments
             if(scraper_settings.comments.links && scraper_settings.comments.links.length) {
@@ -249,6 +369,17 @@ module.exports.detail = function(event, cb) {
 
 };
 
+var download = function (link, done) {
+
+
+
+
+    setTimeout(function(){
+        console.log(" > Downloading link: "+ link);
+        //done({link:link});
+    }, Math.random(1,3000));
+}
+
 //read comments
 var getComments = function(response, settings, redirect_comments, event, cb) {
 
@@ -273,7 +404,8 @@ var getComments = function(response, settings, redirect_comments, event, cb) {
             //description
             if(settings.detail.description && settings.detail.description.selector) {
                 container.find(settings.detail.description.selector).each(function (idx, elem) {
-                    comment.description += (comment.description ? "\n" : "") + $(elem).text().trim();
+                    //comment.description += (comment.description ? "\n" : "") + $(elem).text().trim();
+                    comment.description = scraper.clearText(comment.description, $(elem).text());
                 });
                 //global regexp settings
                 if (comment.description && event.settings.regExp && event.settings.regExp.comment_description) {

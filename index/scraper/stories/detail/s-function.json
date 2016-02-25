@@ -2,7 +2,7 @@
   "name": "detail",
   "handler": "stories/detail/handler.handler",
   "runtime": "nodejs",
-  "timeout": 10,
+  "timeout": 15,
   "memorySize": 1024,
   "custom": {
     "excludePatterns": [],

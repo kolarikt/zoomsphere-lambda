@@ -11,7 +11,8 @@ var request = require('request'),
     charset = require("charset"),
     encoding = require("encoding"),
     util = require('util'),
-    url = require('url');
+    url = require('url'),
+    chalk = require('chalk');
 
 //default http headers
 var http_headers = {
@@ -20,6 +21,7 @@ var http_headers = {
     'Connection': 'keep-alive',
     'User-Agent': 'Mozilla/5.0 (Windows NT 6.2; WOW64; rv:24.0) Gecko/20100101 Firefox/30.0'
 };
+
 
 
 //open Page
@@ -52,19 +54,24 @@ module.exports.openPage = function(link, mode, settings, cb) {
         }
 
         var encode = true, redirect = false;
-        //, selector = false
 
-        if(mode == 'stories' && settings.length > 1) {
+
+        /*
+        if(0 && mode == 'stories' && settings.length > 1) {
             encode = false;
             redirect = true;
-            //selector = true;
+        }
+        */
+
+        if(mode == 'stories') {
+            encode = false;
+            redirect = false;
         }
 
         //redirect to comments page
         else if(mode == 'redirect_comments' && settings.length > 1) {
             encode = false;
             redirect = true;
-            //selector = false;
             settings.splice(0,1);
         }
 
@@ -191,3 +198,31 @@ module.exports.getScraperSettings = function(event) {
     return result;
 
 };
+
+//clear text
+module.exports.clearText = function(result, text) {
+
+    text = text.replace(/[\r\n|\r]/g, "\n").trim();
+    var lines = text.split("\n");
+
+    //console.log(lines)
+
+    if(lines.length) {
+
+        lines.forEach(function(row) {
+            row = row.trim();
+
+            if(row.length) {
+                result += (result ? "\n" : "") + row;
+            }
+        });
+        return result;
+    }
+    else {
+        return result;
+    }
+    //console.log(lines);
+    //text = text.replace(/\s+$/gm, "").replace(/\s{1,}/g, " ").replace(/[/\n]{2,}/g, "+++").trim();
+    //text = text.replace(/\s{1,}/g, " ").replace(/[^\S\r\n]+$/gm, "");
+
+}
