@@ -105,7 +105,7 @@ module.exports.openPage = function(link, mode, settings, cb) {
 
                 //relative address
                 if(redirect_url_parse.host === null) {
-                    redirect_url = url.resolve(link, redirect_url);
+                    redirect_url = url.resolve(module.exports.clearUrlResolve(link), redirect_url);
                 }
 
                 if(mode == 'stories') {
@@ -230,3 +230,86 @@ module.exports.clearText = function(result, text) {
     //text = text.replace(/\s{1,}/g, " ").replace(/[^\S\r\n]+$/gm, "");
 
 }
+
+
+module.exports.clearUrlResolve = function (link) {
+    return link.slice(-1) == '/' ?  link.slice(0, -1) : link;
+}
+
+//test settings
+module.exports.testSettings = function(key) {
+
+
+    var settings = []
+
+    settings['idnes'] = {
+        'settings' : {"regExp":{"comment_author":"comment.author = comment.author.replace(/[0-9]{1,}/g, '')"},"startUrl":"http://zpravy.idnes.cz/archiv.aspx?datum=&idostrova=idnes","selectors":[{"parentSelectors":["_root"],"type":"SelectorLink","multiple":true,"id":"stories2","selector":"div.cell h3 a","delay":""},{"parentSelectors":["stories"],"type":"SelectorText","multiple":false,"id":"title","selector":"h1","regex":"","delay":""},{"parentSelectors":["stories"],"type":"SelectorText","multiple":true,"id":"description","selector":"div.opener, div.bbtext > p, h3.tit","regex":"","delay":""},{"parentSelectors":["stories"],"type":"SelectorText","multiple":false,"id":"author","selector":"a.name span","regex":"","delay":""},{"parentSelectors":["stories"],"type":"SelectorImage","multiple":false,"id":"image","selector":"img.block","delay":"","downloadImage":false},{"parentSelectors":["stories"],"type":"SelectorLink","multiple":false,"id":"comments","selector":"div.moot-capture a","delay":""},{"parentSelectors":["comments1"],"type":"SelectorElement","multiple":true,"id":"comment","selector":"div.disc-list > div.contribution","delay":""},{"parentSelectors":["comment"],"type":"SelectorText","multiple":true,"id":"comment_description","selector":"p","regex":"","delay":""},{"parentSelectors":["comment"],"type":"SelectorText","multiple":false,"id":"comment_author","selector":"h4.name a","regex":"","delay":""},{"parentSelectors":["comment"],"type":"SelectorImage","multiple":false,"id":"comment_author_image","selector":"td.disc-user-foto img","downloadImage":false,"delay":""},{"parentSelectors":["comments"],"type":"SelectorLink","multiple":false,"id":"comments1","selector":"div.moot-line a:nth-of-type(2)","delay":""}],"_id":"idnesfinal"},
+        'url': 'http://zpravy.idnes.cz/video-srazka-vlaku-bavorsko-d1m-/zahranicni.aspx?c=A160210_125107_zahranicni_mlb'
+    };
+
+    settings['novinky'] = {
+        'settings' :  {"startUrl":"http://www.novinky.cz/stalo-se/","selectors":[{"parentSelectors":["_root"],"type":"SelectorLink","multiple":true,"id":"stories","selector":"div div div div div div div:nth-of-type(n+2) h3 a, div.item:nth-of-type(n+4) h3.likeInInfo a","delay":""},{"parentSelectors":["stories"],"type":"SelectorText","multiple":false,"id":"title","selector":"h1","regex":"","delay":""},{"parentSelectors":["stories"],"type":"SelectorText","multiple":true,"id":"description","selector":"p.perex, div.articleBody p","regex":"","delay":""},{"parentSelectors":["stories"],"type":"SelectorText","multiple":false,"id":"author","selector":"p.articleAuthors","regex":"","delay":""},{"parentSelectors":["stories"],"type":"SelectorImage","multiple":false,"id":"image","selector":"div.topMediaBox img","downloadImage":false,"delay":""},{"parentSelectors":["stories"],"type":"SelectorLink","multiple":false,"id":"comments","selector":"div.related a","delay":""},{"parentSelectors":["comments"],"type":"SelectorElement","multiple":true,"id":"comment","selector":"div.contribution","delay":""},{"parentSelectors":["comment"],"type":"SelectorText","multiple":false,"id":"comment_description","selector":"p","regex":"","delay":""},{"parentSelectors":["comment"],"type":"SelectorText","multiple":false,"id":"comment_author","selector":"h4.name span","regex":"","delay":""},{"parentSelectors":["comment"],"type":"SelectorImage","multiple":false,"id":"comment_author_image","selector":"img.icon","downloadImage":false,"delay":""}],"_id":"novinky"},
+        'url': 'http://www.novinky.cz/zahranicni/evropa/394508-nato-vyrazi-do-egejskeho-more-proti-paserakum-lidi.htm'
+    };
+    settings['androidmarket'] = {
+        'settings' : {"startUrl":"http://androidmarket.cz/category/novinky/","selectors":[{"parentSelectors":["_root"],"type":"SelectorLink","multiple":true,"id":"stories","selector":"h2.title a","delay":""},{"parentSelectors":["stories"],"type":"SelectorText","multiple":false,"id":"title","selector":"h1 a","regex":"","delay":""},{"parentSelectors":["stories"],"type":"SelectorText","multiple":true,"id":"description","selector":"div.entry p","regex":"","delay":""},{"parentSelectors":["stories"],"type":"SelectorImage","multiple":false,"id":"image","selector":"img.aligncenter","downloadImage":false,"delay":""},{"parentSelectors":["stories"],"type":"SelectorElement","multiple":false,"id":"comment","selector":"ul#dsq-comments li.comment","delay":""},{"parentSelectors":["comment"],"type":"SelectorText","multiple":true,"id":"comment_description","selector":"div.dsq-comment-message>p","regex":"","delay":""},{"parentSelectors":["comment"],"type":"SelectorText","multiple":false,"id":"comment_author","selector":".dsq-comment-header span","regex":"","delay":""}],"_id":"androidmarket_cz"},
+        'url': 'http://androidmarket.cz/mobilni-telefony/huawei-ukazal-novy-y6-propetipalec-stredni-tridy/'
+    };
+    settings['praktickazena'] = {
+        'settings' : {"regExp":{"comment_author":"comment.description = comment.description.replace(/[0-9]{1,}/g, '')"},"_id":"praktickazena_cz","startUrl":"http://praktickazena.cz","selectors":[{"parentSelectors":["_root"],"type":"SelectorLink","multiple":true,"id":"stories","selector":"h3 a","delay":""},{"parentSelectors":["stories"],"type":"SelectorText","multiple":false,"id":"title","selector":"h1.title","regex":"","delay":""},{"parentSelectors":["stories"],"type":"SelectorText","multiple":true,"id":"description","selector":"div.perex p","regex":"","delay":""},{"parentSelectors":["stories"],"type":"SelectorImage","multiple":false,"id":"image","selector":"div.article-detail img","downloadImage":false,"delay":""},{"parentSelectors":["stories"],"type":"SelectorElement","multiple":true,"id":"comment","selector":"div.comment","delay":""},{"parentSelectors":["comment"],"type":"SelectorText","multiple":true,"id":"comment_description","selector":"div.text","regex":"","delay":""},{"parentSelectors":["comment"],"type":"SelectorText","multiple":false,"id":"comment_author","selector":"span.name","regex":"","delay":""}]},
+    'url':'http://praktickazena.kafe.cz/krasa/kreativni-nocniky/'
+    };
+    settings['synotloga'] = {
+        'settings' :{"_id":"synotligacz","startUrl":"http://www.synotliga.cz/clanky.html","selectors":[{"parentSelectors":["_root"],"type":"SelectorLink","multiple":true,"id":"stories","selector":"h2 a","delay":""},{"parentSelectors":["stories"],"type":"SelectorText","multiple":false,"id":"title","selector":"h1","regex":"","delay":""},{"parentSelectors":["stories"],"type":"SelectorText","multiple":false,"id":"description","selector":"article p","regex":"","delay":""},{"parentSelectors":["stories"],"type":"SelectorImage","multiple":false,"id":"image","selector":"div.image img","downloadImage":false,"delay":""},{"parentSelectors":["stories"],"type":"SelectorText","multiple":false,"id":"author","selector":"p.about span:nth-of-type(2)","regex":"","delay":""}]},
+        'url':'http://www.synotliga.cz/clanek/11064-sprinter-a-maratonec-triumfy-mezi-bci-m-do-pbrami-a-olku.html'
+    };
+    settings['panorama_it'] = {
+        'settings' :{"_id":"panorama_it","startUrl":"http://www.panorama.it/","selectors":[{"parentSelectors":["_root"],"type":"SelectorLink","multiple":true,"id":"stories","selector":"div.col-sm-5 h2 a, div.row.row-wide-launch article.article-entry:nth-of-type(n+2) h2 a","delay":""},{"parentSelectors":["stories"],"type":"SelectorText","multiple":false,"id":"title","selector":"h1","regex":"","delay":""},{"parentSelectors":["stories"],"type":"SelectorText","multiple":true,"id":"description","selector":"header.article-header h2, div.entry p","regex":"","delay":""},{"parentSelectors":["stories"],"type":"SelectorImage","multiple":false,"id":"image","selector":"img.attachment-Foto","downloadImage":false,"delay":""}]},
+        'url':'http://www.panorama.it/sport/calcio/india-calciatore-morto-capriole-klose-video/'
+    };
+    settings['quattroroute_it'] = {
+        'settings' :{"_id":"quattroruote_it","startUrl":"http://www.quattroruote.it/","selectors":[{"parentSelectors":["_root"],"type":"SelectorLink","multiple":true,"id":"stories","selector":"div.rsSlide:nth-of-type(1) a, div.content_result_fixed:nth-of-type(n+2) article.block > a","delay":""},{"parentSelectors":["stories"],"type":"SelectorText","multiple":false,"id":"title","selector":"div.article_header h1","regex":"","delay":""},{"parentSelectors":["stories"],"type":"SelectorText","multiple":true,"id":"description","selector":"div.article_paragraph:nth-of-type(n+2) p:nth-of-type(1)","regex":"","delay":""},{"parentSelectors":["stories"],"type":"SelectorImage","multiple":false,"id":"image","selector":"img.rsImg","downloadImage":false,"delay":""},{"parentSelectors":["stories"],"type":"SelectorElement","multiple":true,"id":"comment","selector":"div.commento > div.corpo-commento, div.comment-replies div.parbase:nth-of-type(n+2)","delay":""},{"parentSelectors":["comment"],"type":"SelectorText","multiple":false,"id":"comment_description","selector":"div.commento > div.corpo-commento div.testo-commento, div.risposta-commento div.testo-commento","regex":"","delay":""},{"parentSelectors":["comment"],"type":"SelectorText","multiple":true,"id":"comment_author","selector":"div.commento > div.corpo-commento div.autore-commento, div.risposta-commento div.autore-commento","regex":"","delay":""}]},
+            'url':'http://www.quattroruote.it/news/mercato/2016/02/24/gruppo_volkswagen_crescita_in_gennaio_grazie_alla_cina.html'
+    };
+    settings['tuttosport.com'] = {
+        'settings' :{"selectors":[{"parentSelectors":["_root"],"type":"SelectorLink","multiple":true,"id":"categories","selector":"nav#menu li a","delay":""},{"parentSelectors":["_root"],"type":"SelectorLink","multiple":true,"id":"stories","selector":"article.article.special h1.title a, article#article_8852386.article h1.title a, section.main-section div.main-column h1.title a","delay":""},{"parentSelectors":["stories"],"type":"SelectorText","multiple":false,"id":"title","selector":"div.main-article-header h1.title","regex":"","delay":""},{"parentSelectors":["stories"],"type":"SelectorText","multiple":true,"id":"description","selector":"div.main > div > p","regex":"","delay":""},{"parentSelectors":["stories"],"type":"SelectorImage","multiple":false,"id":"image","selector":"figure img","downloadImage":false,"delay":""},{"parentSelectors":["stories"],"type":"SelectorText","multiple":false,"id":"author","selector":"p.author strong","regex":"","delay":""},{"parentSelectors":["stories"],"type":"SelectorElement","multiple":true,"id":"comment","selector":"div.gig-comments-comments > div.gig-comment > div.gig-comment-data","delay":""},{"parentSelectors":["comment"],"type":"SelectorText","multiple":false,"id":"comment_description","selector":"div.gig-comments-comments > div.gig-comment > div.gig-comment-data > div.gig-comment-self-data div.gig-comment-body, div.gig-comments-comments > div.gig-comment:nth-of-type(n+4) > div.gig-comment-data > div.gig-comment-replies > div.gig-comment > div.gig-comment-data > div.gig-comment-self-data div.gig-comment-body, div.gig-comments-comments > div.gig-comment:nth-of-type(n+4) > div.gig-comment-data > div.gig-comment-replies > div.gig-comment > div.gig-comment-data > div.gig-comment-replies > div.gig-comment > div.gig-comment-data > div.gig-comment-self-data div.gig-comment-body, div.gig-comment-replies div.gig-comment-replies div.gig-comment-replies div.gig-comment-body","regex":"","delay":""},{"parentSelectors":["comment"],"type":"SelectorText","multiple":true,"id":"comment_author","selector":"div.gig-comments-comments > div.gig-comment > div.gig-comment-data > div.gig-comment-self-data span.gig-comment-username, div.gig-comments-comments > div.gig-comment:nth-of-type(n+4) > div.gig-comment-data > div.gig-comment-replies > div.gig-comment > div.gig-comment-data > div.gig-comment-self-data span.gig-comment-username, div.gig-comments-comments > div.gig-comment:nth-of-type(n+4) > div.gig-comment-data > div.gig-comment-replies > div.gig-comment > div.gig-comment-data > div.gig-comment-replies > div.gig-comment > div.gig-comment-data > div.gig-comment-self-data span.gig-comment-username, div.gig-comment-replies div.gig-comment-replies div.gig-comment-replies span.gig-comment-username","regex":"","delay":""},{"parentSelectors":["comment"],"type":"SelectorImage","multiple":true,"id":"comment_author_image","selector":"div.gig-comments-comments > div.gig-comment > div.gig-comment-photo img.gig-comment-img, div.gig-comments-comments > div.gig-comment:nth-of-type(n+4) > div.gig-comment-data > div.gig-comment-replies > div.gig-comment > div.gig-comment-photo img.gig-comment-img, div.gig-comments-comments > div.gig-comment:nth-of-type(n+4) > div.gig-comment-data > div.gig-comment-replies > div.gig-comment > div.gig-comment-data > div.gig-comment-replies > div.gig-comment > div.gig-comment-photo img.gig-comment-img, div.gig-comment-replies div.gig-comment-replies div.gig-comment-replies img.gig-comment-img","downloadImage":false,"delay":""}],"_id":"tuttosport_org","startUrl":"http://www.tuttosport.com/"},
+            'url':'http://www.tuttosport.com/news/calcio/serie-a/juventus/2016/02/25-8852392/bayern_vidal_ci_ricasca_lascia_lalbergo_della_squadra_in_piena_notte/'
+    };
+
+    settings['ciot.it'] = {
+        'settings' : {"regExp":{"image":"detail.image = 'http://www.cioe.it/' + detail.image"},"_id":"cioe_it","startUrl":"http:\/\/www.cioe.it\/","selectors":[{"parentSelectors":["_root"],"type":"SelectorLink","multiple":true,"id":"categories","selector":"div#navigation a","delay":""},{"parentSelectors":["_root"],"type":"SelectorLink","multiple":true,"id":"stories","selector":"div#contentBlock-1 div.news-list-item:nth-of-type(n+2) h2 a","delay":""},{"parentSelectors":["stories"],"type":"SelectorText","multiple":false,"id":"title","selector":"div.news-single-item h1","regex":"","delay":""},{"parentSelectors":["stories"],"type":"SelectorText","multiple":true,"id":"description","selector":"div.news-single-item > p,div.news-single-item p.bodytext","regex":"","delay":""},{"parentSelectors":["stories"],"type":"SelectorImage","multiple":false,"id":"image","selector":"div.main-image img","downloadImage":false,"delay":""}]},
+        'url':'http://www.cioe.it/music/articolo/davide-papasidero-torna-con-il-suo-nuovo-singolo/'
+    };
+
+    /*
+     settings[''] = {
+     'settings' :,
+     'url':''
+     };
+     settings[''] = {
+     'settings' :,
+     'url':''
+     };
+    settings[''] = {
+        'settings' :,
+        'url':''
+    };
+       */
+
+    if(!isNaN(key)) {
+        var n = 0
+        for(var i in settings) {
+            if(n == key) {
+                return settings[i]
+            }
+            n++
+        }
+    }
+    else if(settings[key] != undefined) {
+        return settings[key]
+    }
+
+
+}
+
+
