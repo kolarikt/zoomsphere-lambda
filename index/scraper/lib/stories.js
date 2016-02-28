@@ -232,6 +232,8 @@ module.exports.detail = function(event, cb) {
 
         var $ = cheerio.load(response, {decodeEntities: true});
 
+        $('style,script').remove();
+
         //title
         if(detail_settings.title && detail_settings.title.selector) {
             detail.title = $(detail_settings.title.selector).text();

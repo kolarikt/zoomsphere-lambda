@@ -300,7 +300,7 @@ module.exports.testSettings = function(key) {
 
     settings['repubblica_it'] = {
         'settings' :{"rss":"http://www.repubblica.it/rss/homepage/rss2.0.xml","selectors":[{"parentSelectors":["_root"],"type":"SelectorLink","multiple":true,"id":"categories","selector":"nav a","delay":""},{"parentSelectors":["_root"],"type":"SelectorLink","multiple":true,"id":"stories","selector":"article.rullo01 h2 a:nth-of-type(1)","delay":""},{"parentSelectors":["stories"],"type":"SelectorText","multiple":false,"id":"title","selector":"h1","regex":"","delay":""},{"parentSelectors":["stories"],"type":"SelectorText","multiple":true,"id":"description","selector":"div.body-text > span, p.summary","regex":"","delay":""},{"parentSelectors":["stories"],"type":"SelectorImage","multiple":false,"id":"image","selector":"a.zoom-foto img","downloadImage":false,"delay":""},{"parentSelectors":["stories"],"type":"SelectorText","multiple":false,"id":"author","selector":"p.firma-articolo","regex":"","delay":""},{"parentSelectors":["comment"],"type":"SelectorText","multiple":true,"id":"comment_author","selector":"div.gig-comments-comment span.gig-comments-username, div.gig-comments-comment-child span.gig-comments-username","regex":"","delay":""}],"startUrl":"http://www.ilsecoloxix.it/","_id":"ilsecoloxix_it"},
-        'url':'http://www.repubblica.it/economia/2016/02/27/news/il_papa_agli_imprenditori_troppi_giovani_prigionieri_della_precarieta_-134357659/?ref=search'
+        'url':'http://www.repubblica.it/politica/2016/02/28/news/maria_elena_boschi_ora_la_nuova_legge_sulle_adozioni_anche_quelle_per_i_single_-134400410/?rss'
     };
 
     settings['leccotoday'] = {
