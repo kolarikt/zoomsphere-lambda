@@ -136,6 +136,7 @@ module.exports.getScraperSettings = function(event) {
     }
 
     var result = {
+        rss:[],
         categories: '',
         stories: '',
         detail: {},
@@ -280,6 +281,33 @@ module.exports.testSettings = function(key) {
         'settings' : {"regExp":{"image":"detail.image = 'http://www.cioe.it/' + detail.image"},"_id":"cioe_it","startUrl":"http:\/\/www.cioe.it\/","selectors":[{"parentSelectors":["_root"],"type":"SelectorLink","multiple":true,"id":"categories","selector":"div#navigation a","delay":""},{"parentSelectors":["_root"],"type":"SelectorLink","multiple":true,"id":"stories","selector":"div#contentBlock-1 div.news-list-item:nth-of-type(n+2) h2 a","delay":""},{"parentSelectors":["stories"],"type":"SelectorText","multiple":false,"id":"title","selector":"div.news-single-item h1","regex":"","delay":""},{"parentSelectors":["stories"],"type":"SelectorText","multiple":true,"id":"description","selector":"div.news-single-item > p,div.news-single-item p.bodytext","regex":"","delay":""},{"parentSelectors":["stories"],"type":"SelectorImage","multiple":false,"id":"image","selector":"div.main-image img","downloadImage":false,"delay":""}]},
         'url':'http://www.cioe.it/music/articolo/davide-papasidero-torna-con-il-suo-nuovo-singolo/'
     };
+    settings['affaritaliani_it'] = {
+        'settings' :{"_id":"affaritaliani_it","startUrl":"http:\/\/www.affaritaliani.it\/","selectors":[{"parentSelectors":["_root"],"type":"SelectorLink","multiple":true,"id":"categories","selector":"ul.menu-top a, div.menu-bottom-w a","delay":""},{"parentSelectors":["_root"],"type":"SelectorLink","multiple":true,"id":"stories","selector":"h2.indent a, article.strillo-big h2 a","delay":""},{"parentSelectors":["stories"],"type":"SelectorText","multiple":false,"id":"title","selector":"h1","regex":"","delay":""},{"parentSelectors":["stories"],"type":"SelectorText","multiple":true,"id":"description","selector":"h2.sottotitolo, div.contenuto-testo-mpesotto p","regex":"","delay":""},{"parentSelectors":["stories"],"type":"SelectorImage","multiple":false,"id":"image","selector":"img.contenuto-foto-img","downloadImage":false,"delay":""}]},
+        'url':''
+    };
+
+    settings['liberoquotidiano_it'] = {
+        'settings' : {"_id":"liberoquotidiano_it","startUrl":"http:\/\/www.liberoquotidiano.it\/","selectors":[{"parentSelectors":["_root"],"type":"SelectorLink","multiple":true,"id":"categories","selector":"div.container_menu ul.menu_1 > li > a","delay":""},{"parentSelectors":["_root"],"type":"SelectorLink","multiple":true,"id":"stories","selector":"h2.titolo a","delay":""},{"parentSelectors":["stories"],"type":"SelectorText","multiple":false,"id":"title","selector":"h1.titolo_articolo","regex":"","delay":""},{"parentSelectors":["stories"],"type":"SelectorText","multiple":true,"id":"description","selector":"div.testo_articolo p","regex":"","delay":""},{"parentSelectors":["stories"],"type":"SelectorImage","multiple":false,"id":"image","selector":"div.foto_articolo img","downloadImage":false,"delay":""}],"regExp":{"image":"detail.image = 'http:\/\/www.liberoquotidiano.it\/' + detail.image"}},
+        'url':'http://www.liberoquotidiano.it/news/politica/11883190/denis-verdini-pizzino-renzi-berlusconi-sinistra-pd-referendum-autunno-maggioranza-senato.html'
+    };
+
+
+    settings['ansa_it'] = {
+        'settings' :{"_id":"ansa_it","startUrl":"http://www.ansa.it/sito/ansait_rss.xml","selectors":[]},
+        'url':''
+    };
+
+
+    settings['repubblica_it'] = {
+        'settings' :{"rss":"http://www.repubblica.it/rss/homepage/rss2.0.xml","selectors":[{"parentSelectors":["_root"],"type":"SelectorLink","multiple":true,"id":"categories","selector":"nav a","delay":""},{"parentSelectors":["_root"],"type":"SelectorLink","multiple":true,"id":"stories","selector":"article.rullo01 h2 a:nth-of-type(1)","delay":""},{"parentSelectors":["stories"],"type":"SelectorText","multiple":false,"id":"title","selector":"h1","regex":"","delay":""},{"parentSelectors":["stories"],"type":"SelectorText","multiple":true,"id":"description","selector":"div.body-text > span, p.summary","regex":"","delay":""},{"parentSelectors":["stories"],"type":"SelectorImage","multiple":false,"id":"image","selector":"a.zoom-foto img","downloadImage":false,"delay":""},{"parentSelectors":["stories"],"type":"SelectorText","multiple":false,"id":"author","selector":"p.firma-articolo","regex":"","delay":""},{"parentSelectors":["comment"],"type":"SelectorText","multiple":true,"id":"comment_author","selector":"div.gig-comments-comment span.gig-comments-username, div.gig-comments-comment-child span.gig-comments-username","regex":"","delay":""}],"startUrl":"http://www.ilsecoloxix.it/","_id":"ilsecoloxix_it"},
+        'url':'http://www.repubblica.it/economia/2016/02/27/news/il_papa_agli_imprenditori_troppi_giovani_prigionieri_della_precarieta_-134357659/?ref=search'
+    };
+
+    settings['leccotoday'] = {
+        'settings' :{"_id":"leccotoday","startUrl":"http:\/\/www.leccotoday.it\/","selectors":[{"parentSelectors":["_root"],"type":"SelectorLink","multiple":true,"id":"categories","selector":"nav.secondary-nav a.link","delay":""},{"parentSelectors":["_root"],"type":"SelectorLink","multiple":true,"id":"stories","selector":"h1.story-heading a.link, h2.story-heading a.link, h3.story-heading a.link","delay":""},{"parentSelectors":["stories"],"type":"SelectorText","multiple":false,"id":"title","selector":"h1.entry-title","regex":"","delay":""},{"parentSelectors":["stories"],"type":"SelectorText","multiple":true,"id":"description","selector":"p.summary, div.entry-content-body p","regex":"","delay":""},{"parentSelectors":["stories"],"type":"SelectorImage","multiple":false,"id":"image","selector":"a.fancybox img","downloadImage":false,"delay":""},{"parentSelectors":["stories"],"type":"SelectorText","multiple":false,"id":"author","selector":"span.author-name","regex":"","delay":""}]},
+        'url':''
+    };
+
 
     /*
      settings[''] = {

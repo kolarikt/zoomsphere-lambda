@@ -8,71 +8,90 @@ var cheerio = require('cheerio'),
     chalk = require('chalk'),
     scraper = require('./scraper'),
     facebook = require('./facebook'),
-    async = require('async');
+    async = require('async'),
+    array_unique = require('array-unique'),
+    feed = require('feed-read');
 
 //links to stories
 module.exports.links = function(event, cb) {
 
 
     //locale test
-    if(process.env.OS == 'Windows_NT') {
+    if (process.env.OS == 'Windows_NT') {
 
         var key = 'idnes';
 
         key = 'ciot.it'
-        key = 8
+        //key = 8
+        //key = 'liberoquotidiano_it'
+        //key = 'ansa_it';
+        key = 'repubblica_it'
+        //key = 10
+        key = 'leccotoday'
 
-        if(scraper.testSettings(key)) {
+        if (scraper.testSettings(key)) {
             var tmp = scraper.testSettings(key);
             event.settings = tmp.settings;
             event.url = tmp.url;
         }
 
+        event.settings ={"startUrl":"http:\/\/www.ilfoglio.it\/home\/index.htm","selectors":[{"parentSelectors":["_root"],"type":"SelectorLink","multiple":true,"id":"categories","selector":"ul.left a","delay":""},{"parentSelectors":["_root"],"type":"SelectorLink","multiple":true,"id":"stories","selector":"div.article:nth-of-type(n+3) > a","delay":""},{"parentSelectors":["stories"],"type":"SelectorText","multiple":false,"id":"title","selector":"h1.titolo","regex":"","delay":""},{"parentSelectors":["stories"],"type":"SelectorText","multiple":true,"id":"description","selector":"p.pre-dettaglio, div.text","regex":"","delay":""},{"parentSelectors":["stories"],"type":"SelectorImage","multiple":false,"id":"image","selector":"img.img","downloadImage":false,"delay":""},{"parentSelectors":["stories"],"type":"SelectorText","multiple":false,"id":"author","selector":"p.articolo-dettagli a","regex":"","delay":""}],"_id":"ilfoglio_it"}
 
     }
 
     //selectors
     var scraper_settings = scraper.getScraperSettings(event);
-    //console.log(scraper_settings)
     var links = [];
 
-    if ( scraper_settings instanceof Error ) {
+    if (scraper_settings instanceof Error) {
         return cb(scraper_settings);
     }
 
-    else if(!event.settings.startUrl) {
+    else if (!event.settings.startUrl) {
         var error = new Error("Undefined startUrl");
         return cb(error);
     }
 
-    else if(!scraper_settings.stories) {
-        var error = new Error("Missing Stories parameters");
+    else if (!scraper_settings.stories && !event.settings.rss) {
+        var error = new Error("Missing Stories/RSS parameters");
         return cb(error);
     }
 
-    else if(!scraper_settings.stories.selector) {
+    else if (!scraper_settings.stories.selector) {
         var error = new Error("Missing Stories selector");
         return cb(error);
     }
 
+    //RSS feed
+    if (event.settings.rss && event.settings.rss.trim() != '') {
 
+        feed(event.settings.rss, function(error, articles) {
 
-    /*
-    else if(!Array.isArray(scraper_settings.stories) || !scraper_settings.stories.length) {
-        var error = new Error("Missing Stories parameters");
-        return cb(error);
+            if (error) {
+                return cb(error);
+            }
+
+            if(articles.length) {
+                articles.forEach(function(item) {
+                    links.push(item.link)
+                })
+            }
+
+            array_unique(links);
+
+            return cb(null, {links: links});
+
+        });
+
     }
-    */
 
     //open categories pages
-    if(scraper_settings.categories) {
+    else if(scraper_settings.categories) {
 
         if(!scraper_settings.categories.selector) {
             var error = new Error("Missing Categories selector");
             return cb(error);
         }
-
-        var links = [];
 
         scraper.openPage(event.settings.startUrl, 'categories', false, function(error, response) {
 
@@ -81,28 +100,7 @@ module.exports.links = function(event, cb) {
                 return cb(error);
             }
 
-            var $ = cheerio.load(response, {decodeEntities: true});
-            var stories = [];
-
-            $(scraper_settings.categories.selector).each(function (idx, elem) {
-
-                var link = $(elem).attr('href');
-
-                if (link != undefined) {
-
-                    var link_parse = url.parse(link);
-
-                    //relative address
-                    if (link_parse.host === null) {
-                       link = url.resolve(scraper.clearUrlResolve(event.settings.startUrl), link);
-                    }
-
-                    stories.push(link);
-
-                }
-
-            });
-
+            var stories = getLinks(response, scraper_settings.categories.selector, event.settings.startUrl)
             //console.log(stories)
             //redirect to other pages from navigation - no one news page
             if (stories.length) {
@@ -113,30 +111,11 @@ module.exports.links = function(event, cb) {
 
                         if (error) {
                             console.log(chalk.white.bgRed(error.toString()));
-                            return cb(error);
+                            // pro key = 'affaritaliani_it' nalezne nevalidni URL, co s tim? ignorovat?
+                            return cb(null, {links: links});
                         }
 
-                        var $ = cheerio.load(response, {decodeEntities: true});
-
-                        $(scraper_settings.stories.selector).each(function (idx, elem) {
-
-                            var link = $(elem).attr('href');
-
-
-                            if (link != undefined) {
-
-                                var link_parse = url.parse(link);
-
-                                //relative address
-                                if (link_parse.host === null) {
-                                    link = url.resolve(scraper.clearUrlResolve(file), link);
-                                }
-
-                                links.push(link);
-
-                            }
-
-                        });
+                        links = links.concat(getLinks(response, scraper_settings.stories.selector, file))
 
                         return cb(null, {links: links});
 
@@ -153,6 +132,7 @@ module.exports.links = function(event, cb) {
 
                         } else {
                             console.log('All files have been processed successfully');
+                            //array_unique(links);
                             return cb(null, {links: links});
                         }
                     }
@@ -176,46 +156,26 @@ module.exports.links = function(event, cb) {
                 return cb(error);
             }
 
-            var $ = cheerio.load(response, {decodeEntities: true});
-
-            $(scraper_settings.stories.selector).each(function (idx, elem) {
-
-                var link = $(elem).attr('href');
-
-                if (link != undefined) {
-
-                    var link_parse = url.parse(link);
-
-                    //relative address
-                    if (link_parse.host === null) {
-                        link = url.resolve(scraper.clearUrlResolve(event.settings.startUrl), link);
-                    }
-
-                    links.push(link);
-
-                }
-
-            });
-
-
-            //test
-            /*
-            if (0 && links.length) {
-                for (var i = 0; i < 10; i++) {
-
-                    facebook.linkInteractions(links[i % links.length], function (error, response) {
-                        console.log(chalk.green(response));
-                    })
-
-                }
-            }
-            */
+            links = getLinks(response, scraper_settings.stories.selector, event.settings.startUrl)
 
             return cb(null, {links: links});
 
 
         });
     }
+
+    //test
+    /*
+     if (0 && links.length) {
+     for (var i = 0; i < 10; i++) {
+
+     facebook.linkInteractions(links[i % links.length], function (error, response) {
+     console.log(chalk.green(response));
+     })
+
+     }
+     }
+     */
 
 };
 
@@ -229,13 +189,13 @@ module.exports.detail = function(event, cb) {
 
         key = 'ciot.it'
         key = 8
+        key = 'repubblica_it'
 
         if(scraper.testSettings(key)) {
             var tmp = scraper.testSettings(key);
             event.settings = tmp.settings;
             event.url = tmp.url;
         }
-
 
     }
 
@@ -412,7 +372,34 @@ module.exports.detail = function(event, cb) {
 
 };
 
+//get links
+var getLinks = function(response, selector, orig_url) {
 
+    var links = []
+    var $ = cheerio.load(response, {decodeEntities: true});
+
+    $(selector).each(function (idx, elem) {
+
+        var link = $(elem).attr('href');
+
+        if (link != undefined) {
+
+            var link_parse = url.parse(link);
+
+            //relative address
+            if (link_parse.host === null) {
+                link = url.resolve(scraper.clearUrlResolve(orig_url), link);
+            }
+
+            links.push(link);
+
+        }
+
+    });
+
+    return array_unique(links);
+
+}
 
 //read comments
 var getComments = function(response, settings, redirect_comments, event, cb) {
