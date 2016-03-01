@@ -197,6 +197,8 @@ module.exports.detail = function(event, cb) {
             event.url = tmp.url;
         }
 
+        event.settings = {"_id":"infocube_plastics_production","startUrl":"http://infocube.cz/cs/plastics-production/","selectors":[{"parentSelectors":["_root"],"type":"SelectorLink","multiple":true,"id":"stories","selector":"a.list-post-title-link","delay":""},{"parentSelectors":["stories"],"type":"SelectorText","multiple":false,"id":"title","selector":"h1","regex":"","delay":""},{"parentSelectors":["stories"],"type":"SelectorText","multiple":true,"id":"desciption","selector":"div.entry-content","regex":"","delay":""},{"parentSelectors":["stories"],"type":"SelectorImage","multiple":false,"id":"image","selector":"img.alignright","downloadImage":false,"delay":""}]}
+        event.url = 'http://infocube.cz/cs/strojirenske-forum-jde-do-tretiho-rocniku/?utm_source=rss&utm_medium=rss&utm_campaign=strojirenske-forum-jde-do-tretiho-rocniku';
     }
 
     var detail = {
@@ -230,13 +232,15 @@ module.exports.detail = function(event, cb) {
             return cb(error);
         }
 
+
         var $ = cheerio.load(response, {decodeEntities: true});
 
+        //strip styles,scripts
         $('style,script').remove();
 
         //title
         if(detail_settings.title && detail_settings.title.selector) {
-            detail.title = $(detail_settings.title.selector).text();
+            detail.title = $(detail_settings.title.selector).text().trim();
         }
 
         //description
