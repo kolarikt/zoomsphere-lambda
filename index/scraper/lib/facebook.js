@@ -1,7 +1,8 @@
 "use strict";
 
 var request = require('request'),
-    api_url = 'https://graph.facebook.com/v2.5/';
+    api_url = 'https://graph.facebook.com/v2.5/',
+    chalk = require('chalk');
 
 //website URL on facebook (comment/likes/share)
 module.exports.linkInteractions = function(link, callback) {
@@ -25,7 +26,7 @@ module.exports.linkInteractions = function(link, callback) {
 //read comments
 module.exports.linkComments = function(link, callback) {
 
-    var access_token = module.exports.accessToken(1);
+    var access_token = module.exports.accessToken();
 
     //facebook url object_id
     request({uri: api_url + '?access_token=' + access_token + '&ids=' + encodeURI(link), gzip:true, encoding: null}, function (error, response, body) {
@@ -37,8 +38,9 @@ module.exports.linkComments = function(link, callback) {
 
         //http status error
         else if (response.statusCode != 200) {
-            console.log(chalk.white.bgRed(response.statusCode));
-            var error = new Error("Request HTTP status code: " + response.statusCode);
+            console.log(chalk.white.bgRed(response.statusCode, response, access_token));
+            console.log(body.toString())
+            var error = new Error("Request HTTP status code: " + response.statusCode + " (" + access_token + ") " + body.toString());
             return callback(error);
         }
 
@@ -78,6 +80,7 @@ module.exports.linkComments = function(link, callback) {
                         if(response.data && response.data.length){
                             response.data.forEach(function(comment){
                                 comments.push({
+                                    //'date':
                                     'description':comment.message,
                                     'author':comment.from.name,
                                     'author_image': 'https://graph.facebook.com/' + comment.from.id + '/picture'
@@ -130,7 +133,9 @@ module.exports.accessToken = function(count) {
         '479247255501719|7BWNvprY9ffl9hxGuQ4k9sIix4g'	//Zommsphere_mount_t]
     ];
 
-    return access_token[0];
+    return access_token[Math.floor(Math.random() * (access_token.length - 1)) + 0];
+
+    //return access_token[0];
 }
 
 
