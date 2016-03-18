@@ -12,10 +12,12 @@
   "keywords": [],
   "devDependencies": {},
   "dependencies": {
+    "array-unique": "^0.2.1",
     "chalk": "^1.1.1",
     "charset": "^1.0.0",
     "cheerio": "^0.20.0",
     "encoding": "^0.1.12",
+    "feed-read": "0.0.1",
     "iconv-lite": "^0.4.13",
     "jschardet": "^1.4.1",
     "request": "^2.69.0",

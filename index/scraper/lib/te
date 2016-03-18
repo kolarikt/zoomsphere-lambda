@@ -1,0 +1,64 @@
+var $ = cheerio.load(response, {decodeEntities: true});
+
+
+$(scraper_settings.stories.selector).each(function (idx, elem) {
+
+    var link = $(elem).attr('href');
+
+
+    if (link != undefined) {
+
+        var link_parse = url.parse(link);
+
+        //relative address
+        if (link_parse.host === null) {
+            link = url.resolve(scraper.clearUrlResolve(file), link);
+        }
+
+        links.push(link);
+
+    }
+
+});
+
+var $ = cheerio.load(response, {decodeEntities: true});
+var stories = [];
+
+$(scraper_settings.categories.selector).each(function (idx, elem) {
+
+    var link = $(elem).attr('href');
+
+    if (link != undefined) {
+
+        var link_parse = url.parse(link);
+
+        //relative address
+        if (link_parse.host === null) {
+            link = url.resolve(scraper.clearUrlResolve(event.settings.startUrl), link);
+        }
+
+        stories.push(link);
+
+    }
+
+});
+var $ = cheerio.load(response, {decodeEntities: true});
+
+$(scraper_settings.stories.selector).each(function (idx, elem) {
+
+    var link = $(elem).attr('href');
+
+    if (link != undefined) {
+
+        var link_parse = url.parse(link);
+
+        //relative address
+        if (link_parse.host === null) {
+            link = url.resolve(scraper.clearUrlResolve(event.settings.startUrl), link);
+        }
+
+        links.push(link);
+
+    }
+
+});

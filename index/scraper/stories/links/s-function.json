@@ -3,7 +3,7 @@
   "handler": "stories/links/handler.handler",
   "runtime": "nodejs",
   "timeout": 15,
-  "memorySize": 1024,
+  "memorySize": 128,
   "custom": {
     "excludePatterns": [],
     "envVars": []
